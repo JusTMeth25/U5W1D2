@@ -33,3 +33,8 @@ build/
 .vscode/
 ### ENV FILE ###
 env.properties
+
+### LOG FILES ###
+logs/
+*.log
+*.log.gz

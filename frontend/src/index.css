@@ -1,0 +1,264 @@
+:root {
+  --sfondo: #0f1115;
+  --scheda: #191c23;
+  --bordo: #2a2f3a;
+  --testo: #e7e9ee;
+  --tenue: #98a0b3;
+  --accento: #6c5ce7;
+  --errore: #ff6b6b;
+
+  color-scheme: dark;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color: var(--testo);
+  background-color: var(--sfondo);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+button {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--bordo);
+  border-radius: 8px;
+  background: var(--accento);
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: var(--bordo);
+  color: var(--tenue);
+  cursor: not-allowed;
+}
+
+input {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--bordo);
+  border-radius: 8px;
+  background: var(--sfondo);
+  color: var(--testo);
+  font: inherit;
+  width: 100%;
+}
+
+a {
+  color: var(--testo);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.errore {
+  color: var(--errore);
+}
+
+/* Barra in alto */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.2rem;
+  border-bottom: 1px solid var(--bordo);
+  background: var(--scheda);
+}
+
+.marchio {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.navbar-destra {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.utente {
+  color: var(--tenue);
+}
+
+/* Campanella */
+.campanella-zona {
+  position: relative;
+}
+
+.campanella {
+  background: transparent;
+  border: none;
+  font-size: 1.3rem;
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -2px;
+  right: -6px;
+  background: var(--errore);
+  color: white;
+  border-radius: 999px;
+  padding: 0 6px;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.pannello {
+  position: absolute;
+  right: 0;
+  top: 2.4rem;
+  width: 340px;
+  max-height: 60vh;
+  overflow-y: auto;
+  background: var(--scheda);
+  border: 1px solid var(--bordo);
+  border-radius: 10px;
+  padding: 0.6rem;
+  z-index: 10;
+}
+
+.pannello-testata {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.pannello-testata button {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.5rem;
+}
+
+.pannello ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pannello li {
+  padding: 0.5rem;
+  border-top: 1px solid var(--bordo);
+  font-size: 0.88rem;
+}
+
+.pannello li.non-letta {
+  background: rgba(108, 92, 231, 0.12);
+}
+
+.pannello small {
+  display: block;
+  color: var(--tenue);
+  font-size: 0.75rem;
+}
+
+.etichetta {
+  background: var(--bordo);
+  border-radius: 6px;
+  padding: 0 6px;
+  font-size: 0.75rem;
+}
+
+.vuoto {
+  color: var(--tenue);
+  font-size: 0.85rem;
+}
+
+/* Contenuto */
+.contenuto {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 1.5rem 1.2rem 3rem;
+}
+
+.scheda-centrata {
+  max-width: 380px;
+  margin: 12vh auto;
+  padding: 1.5rem;
+  background: var(--scheda);
+  border: 1px solid var(--bordo);
+  border-radius: 12px;
+}
+
+.scheda-centrata form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.scheda-centrata label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--tenue);
+}
+
+/* Elenco bacheche */
+.elenco-bacheche {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.elenco-bacheche li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1rem;
+  background: var(--scheda);
+  border: 1px solid var(--bordo);
+  border-radius: 10px;
+}
+
+.elenco-bacheche .titolo {
+  font-weight: 600;
+}
+
+.elenco-bacheche small {
+  display: block;
+  color: var(--tenue);
+  font-size: 0.8rem;
+}
+
+/* Messaggi */
+.messaggi {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.messaggi li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--scheda);
+  border: 1px solid var(--bordo);
+  border-radius: 10px;
+}
+
+.messaggi li.mio {
+  border-color: var(--accento);
+}
+
+.messaggi small {
+  color: var(--tenue);
+  font-size: 0.75rem;
+}
+
+.scrittura {
+  display: flex;
+  gap: 0.5rem;
+}

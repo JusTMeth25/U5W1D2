@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Configurazione di logging dell'applicazione.
+
+    Ogni riga porta con se' il contesto del thread che l'ha prodotta:
+      - t         nome del thread (http-nio-3001-exec-1, main, clientInboundChannel-1, ...)
+      - tid       id numerico del thread, assegnato da LoggingContext all'ingresso
+      - rid       id della richiesta / dell'unita' di lavoro, propagato anche al client
+                  tramite l'header di risposta X-Request-Id
+      - user      username autenticato, oppure '-' se la richiesta e' anonima
+
+    tid, rid e user valgono '-' finche' LoggingContext non li popola: e' il caso
+    dei thread interni di Spring e di Tomcat, che non appartengono a nessuna richiesta.
+-->
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- Se logging.file.name non e' valorizzato, Boot non definisce LOG_FILE: qui c'e' il ripiego. -->
+    <property name="LOG_FILE" value="${LOG_FILE:-logs/u5w1d2.log}"/>
+
+    <property name="LOG_CONTEXT_PATTERN"
+              value="[%15.15t tid=%X{threadId:--} rid=%X{requestId:--} user=%X{user:--}]"/>
+
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:-}){magenta} %clr(--- ${LOG_CONTEXT_PATTERN}){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:-} --- ${LOG_CONTEXT_PATTERN} %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

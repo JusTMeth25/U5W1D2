@@ -8,6 +8,8 @@ import com.example.u5w1d2.exceptions.TopicNotFoundException;
 import com.example.u5w1d2.repositories.SubscriptionRepository;
 import com.example.u5w1d2.repositories.TopicRepository;
 import com.example.u5w1d2.topics.dto.TopicView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class TopicService {
+
+    private static final Logger log = LoggerFactory.getLogger(TopicService.class);
 
     private final TopicRepository topics;
     private final SubscriptionRepository subs;
@@ -52,21 +56,36 @@ public class TopicService {
 
     @Transactional
     public void subscribe(String name, AppUser current) {
-        Topic topic = topics.findByName(name).orElseThrow(() -> new TopicNotFoundException(name));
+        Topic topic = topics.findByName(name).orElseThrow(() -> topicInesistente(name));
         if (subs.existsByUserAndTopic(current, topic)) {
+            log.warn("Iscrizione rifiutata: '{}' e' gia' iscritto al topic '{}'", current.getUsername(), name);
             throw new AlreadySubscribedException(name);
         }
         try {
             subs.save(new Subscription(current, topic));
+            log.info("Iscrizione al topic '{}' per '{}'", name, current.getUsername());
         } catch (DataIntegrityViolationException ex) {
             // due clic nello stesso istante: il vincolo unico (user_id, topic_id) e' la difesa vera
+            log.warn("Doppia iscrizione simultanea a '{}' per '{}': respinta dal vincolo unico",
+                    name, current.getUsername());
             throw new AlreadySubscribedException(name);
         }
     }
 
     @Transactional
     public void unsubscribe(String name, AppUser current) {
-        Topic topic = topics.findByName(name).orElseThrow(() -> new TopicNotFoundException(name));
-        subs.findByUserAndTopic(current, topic).ifPresent(subs::delete);
+        Topic topic = topics.findByName(name).orElseThrow(() -> topicInesistente(name));
+        subs.findByUserAndTopic(current, topic).ifPresentOrElse(
+                sub -> {
+                    subs.delete(sub);
+                    log.info("Disiscrizione dal topic '{}' per '{}'", name, current.getUsername());
+                },
+                () -> log.warn("Disiscrizione a vuoto: '{}' non era iscritto al topic '{}'",
+                        current.getUsername(), name));
+    }
+
+    private TopicNotFoundException topicInesistente(String name) {
+        log.warn("Topic '{}' inesistente", name);
+        return new TopicNotFoundException(name);
     }
 }
